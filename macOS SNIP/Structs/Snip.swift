@@ -9,14 +9,14 @@ import Foundation
 import SwiftUI
 
 class Snip: ObservableObject {
-    var refreshToken: String = ""
-    var accessToken: String = ""
+    @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String = ""
+    @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String = ""
     var timer: Timer? = nil
     var currentSong: String = ""
     @Published var isLoggedIn: Bool = false
     
     init() {
-        if !UserDefaults.standard.bool(forKey: "IsLoggedIn") {
+        if !UserDefaults.standard.bool(forKey: UserDefaultsKeys.loggedIn) {
             print("User not logged in!")
             self.requestUserAuthentication()
         } else {
@@ -102,9 +102,7 @@ class Snip: ObservableObject {
                     DispatchQueue.main.async {
                         self.isLoggedIn = true
                     }
-                    defaults.set(jsonResponse.refresh_token, forKey: "SpotifyRefreshToken")
-                    defaults.setValue(jsonResponse.access_token, forKey: "SpotifyAccessToken")
-                    defaults.setValue(true, forKey: "IsLoggedIn")
+                    defaults.setValue(true, forKey: UserDefaultsKeys.loggedIn)
                     self.registerTimer()
                 } catch {
                     print("ERROR: \(error)")
@@ -123,13 +121,12 @@ class Snip: ObservableObject {
     func refreshAccessToken() {
         let endpoint = "https://accounts.spotify.com/api/token"
         let grantType = "refresh_token"
-        let refreshToken = UserDefaults.standard.string(forKey: "SpotifyRefreshToken")
         
         var requestBodyCompomnents = URLComponents()
         requestBodyCompomnents.queryItems =
         [
             .init(name: "grant_type", value: grantType),
-            .init(name: "refresh_token", value: refreshToken)
+            .init(name: "refresh_token", value: self.refreshToken)
         ]
         
         // Define headers
@@ -157,8 +154,9 @@ class Snip: ObservableObject {
                 print("Refreshed Access Token")
                 
                 // Store access token
-                let defaults = UserDefaults.standard
-                defaults.setValue(jsonResponse.access_token, forKey: "SpotifyAccessToken")
+                DispatchQueue.main.async {
+                    self.accessToken = jsonResponse.access_token
+                }
             } catch {
                 print("ERROR: \(error)")
             }
@@ -176,7 +174,7 @@ class Snip: ObservableObject {
         var request = URLRequest(url: URL(string: endpoint)!)
         
         // Set headers
-        request.setValue("Bearer \(UserDefaults.standard.string(forKey: "SpotifyAccessToken") ?? "")", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(UserDefaults.standard.string(forKey: UserDefaultsKeys.accessToken) ?? "")", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content_Type")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -238,9 +236,7 @@ class Snip: ObservableObject {
     
     func logOut() {
         let defaults = UserDefaults.standard
-        defaults.setValue(nil, forKey: "SpotifyAccessToken")
-        defaults.setValue(nil, forKey: "SpotifyRefreshToken")
-        defaults.setValue(false, forKey: "IsLoggedIn")
+        defaults.setValue(false, forKey: UserDefaultsKeys.loggedIn)
         self.isLoggedIn = false
         self.refreshToken = ""
         self.accessToken = ""
