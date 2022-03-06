@@ -10,6 +10,7 @@
 		58B72C0727D38567000D4595 /* UserSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B72C0627D38567000D4595 /* UserSecrets.swift */; };
 		58B72C0E27D39BC7000D4595 /* ResponseStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B72C0D27D39BC7000D4595 /* ResponseStructs.swift */; };
 		58B72C1027D3B110000D4595 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 58B72C0F27D3B110000D4595 /* .gitignore */; };
+		58CCF72D27D4771800B9D9FB /* Snip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CCF72C27D4771800B9D9FB /* Snip.swift */; };
 		58FE77A527D384A2002EACFA /* macOS_SNIPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FE77A427D384A2002EACFA /* macOS_SNIPApp.swift */; };
 		58FE77A727D384A2002EACFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FE77A627D384A2002EACFA /* ContentView.swift */; };
 		58FE77A927D384A5002EACFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58FE77A827D384A5002EACFA /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 		58B72C0627D38567000D4595 /* UserSecrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSecrets.swift; sourceTree = "<group>"; };
 		58B72C0D27D39BC7000D4595 /* ResponseStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseStructs.swift; sourceTree = "<group>"; };
 		58B72C0F27D3B110000D4595 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		58CCF72C27D4771800B9D9FB /* Snip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snip.swift; sourceTree = "<group>"; };
 		58FE77A127D384A2002EACFA /* macOS SNIP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS SNIP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58FE77A427D384A2002EACFA /* macOS_SNIPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = macOS_SNIPApp.swift; sourceTree = "<group>"; };
 		58FE77A627D384A2002EACFA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -54,12 +56,13 @@
 			path = UserSecrets;
 			sourceTree = "<group>";
 		};
-		58B72C0A27D39B6D000D4595 /* Response Structs */ = {
+		58B72C0A27D39B6D000D4595 /* Structs */ = {
 			isa = PBXGroup;
 			children = (
 				58B72C0D27D39BC7000D4595 /* ResponseStructs.swift */,
+				58CCF72C27D4771800B9D9FB /* Snip.swift */,
 			);
-			path = "Response Structs";
+			path = Structs;
 			sourceTree = "<group>";
 		};
 		58FE779827D384A2002EACFA = {
@@ -82,7 +85,7 @@
 		58FE77A327D384A2002EACFA /* macOS SNIP */ = {
 			isa = PBXGroup;
 			children = (
-				58B72C0A27D39B6D000D4595 /* Response Structs */,
+				58B72C0A27D39B6D000D4595 /* Structs */,
 				58B72C0927D38586000D4595 /* UserSecrets */,
 				58B72C0827D38576000D4595 /* Views */,
 				58FE77A427D384A2002EACFA /* macOS_SNIPApp.swift */,
@@ -173,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58CCF72D27D4771800B9D9FB /* Snip.swift in Sources */,
 				58B72C0727D38567000D4595 /* UserSecrets.swift in Sources */,
 				58FE77A727D384A2002EACFA /* ContentView.swift in Sources */,
 				58FE77A527D384A2002EACFA /* macOS_SNIPApp.swift in Sources */,
