@@ -11,12 +11,12 @@ import SwiftUI
 class Snip: ObservableObject {
     @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String = ""
     @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String = ""
+    @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool = false
     var timer: Timer? = nil
     var currentSong: String = ""
-    @Published var isLoggedIn: Bool = false
     
     init() {
-        if !UserDefaults.standard.bool(forKey: UserDefaultsKeys.loggedIn) {
+        if !self.isLoggedIn {
             print("User not logged in!")
             self.requestUserAuthentication()
         } else {
@@ -94,7 +94,6 @@ class Snip: ObservableObject {
                 // Decode response
                 do {
                     let jsonResponse = try JSONDecoder().decode(AccessTokenResponse.self, from: data)
-                    let defaults = UserDefaults.standard
                     
                     // Store refresh token
                     self.accessToken = jsonResponse.access_token
@@ -102,7 +101,6 @@ class Snip: ObservableObject {
                     DispatchQueue.main.async {
                         self.isLoggedIn = true
                     }
-                    defaults.setValue(true, forKey: UserDefaultsKeys.loggedIn)
                     self.registerTimer()
                 } catch {
                     print("ERROR: \(error)")
@@ -174,7 +172,7 @@ class Snip: ObservableObject {
         var request = URLRequest(url: URL(string: endpoint)!)
         
         // Set headers
-        request.setValue("Bearer \(UserDefaults.standard.string(forKey: UserDefaultsKeys.accessToken) ?? "")", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(self.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content_Type")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -235,8 +233,6 @@ class Snip: ObservableObject {
     }
     
     func logOut() {
-        let defaults = UserDefaults.standard
-        defaults.setValue(false, forKey: UserDefaultsKeys.loggedIn)
         self.isLoggedIn = false
         self.refreshToken = ""
         self.accessToken = ""
