@@ -209,8 +209,11 @@ class Snip: ObservableObject {
                 
                 // Successful request | Currently no song playing
                 case 204:
-                    print("No Content: No song playing!")
-                    self.writeText(nameString: "")
+                    if self.currentSong != "" {
+                        print("No Content: No song playing!")
+                        self.currentSong = ""
+                        self.writeText(nameString: "")
+                    }
                 
                 // Unsuccessful request | Invalid Access Token
                 case 401:
