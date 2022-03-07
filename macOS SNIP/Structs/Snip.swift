@@ -11,6 +11,7 @@ import SwiftUI
 class Snip: ObservableObject {
     @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String = ""
     @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String = ""
+    @AppStorage(UserDefaultsKeys.displayName) var displayName: String = ""
     @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool = false
     var timer: Timer? = nil
     var currentSong: String = ""
@@ -55,11 +56,11 @@ class Snip: ObservableObject {
         
     }
 
-    func requestAccessToken() {
+    func requestAccessToken(code: String) {
         
         let endpoint = "https://accounts.spotify.com/api/token"
         let grantType = "authorization_code"
-        let code = "AQCvrW6QURbmkxbaNy_lfTM1g0sa3rZttS8kRFnEsgjonTrshIbp7qfnkA8hTm-QsN_6bJXIvz8mHVo02VFEo9ohNBSDxbK4BrjqM3ywZjDR_vycYxDafEPQjHTSShCEOPnEBY2Y4MG1uBtLFZIxFSUR_hK5cRbLf-Jb3EIlu4EEM6fucymRWynf94p_2ymmmeu5Ehg7IgY"
+        let code = code
         let redirectUri = "http://localhost:10597/"
         
         var requestBodyCompomnents = URLComponents()
@@ -96,12 +97,13 @@ class Snip: ObservableObject {
                     let jsonResponse = try JSONDecoder().decode(AccessTokenResponse.self, from: data)
                     
                     // Store refresh token
-                    self.accessToken = jsonResponse.access_token
-                    self.refreshToken = jsonResponse.refresh_token
                     DispatchQueue.main.async {
+                        self.accessToken = jsonResponse.access_token
+                        self.refreshToken = jsonResponse.refresh_token
                         self.isLoggedIn = true
+                        self.requestUsername()
+                        self.registerTimer()
                     }
-                    self.registerTimer()
                 } catch {
                     print("ERROR: \(error)")
                 }
@@ -114,6 +116,7 @@ class Snip: ObservableObject {
         }
         
         task.resume()
+        
     }
 
     func refreshAccessToken() {
@@ -232,10 +235,58 @@ class Snip: ObservableObject {
         task.resume()
     }
     
+    func requestUsername() {
+        let endpoint = "https://api.spotify.com/v1/me"
+        
+        // Build request
+        var request = URLRequest(url: URL(string: endpoint)!)
+        
+        // Set headers
+        request.setValue("Bearer \(self.accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content_Type")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard error == nil, let data = data, let response = response as? HTTPURLResponse else { return }
+            
+            // Handle common status codes
+            switch response.statusCode {
+                
+                // Successful request | Write data
+                case 200:
+                    do {
+                        let jsonResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
+                        self.displayName = jsonResponse.display_name
+                    } catch {
+                        print("ERROR: \(error)")
+                    }
+                
+                // Unsuccessful request | Invalid Access Token
+                case 401:
+                    print("STATUS CODE: \(response.statusCode)")
+                    print("Regenerating Access Token")
+                    self.refreshAccessToken()
+                
+                    // Start another request after 1 second
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.requestUsername()
+                    }
+                
+                // Unsuccessful request | Unusual response
+                default:
+                    print("Unusual status code: \(response.statusCode)")
+                    print(String(data: data, encoding: .utf8) as Any)
+                }
+        }
+        
+        task.resume()
+    }
+    
     func logOut() {
         self.isLoggedIn = false
         self.refreshToken = ""
         self.accessToken = ""
+        self.displayName = ""
         self.timer?.invalidate()
     }
     

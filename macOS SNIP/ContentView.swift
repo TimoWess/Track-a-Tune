@@ -9,15 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var snip = Snip()
+    @State var showAuthCodeTextField = false
+    @State var authCode = ""
     var body: some View {
         VStack {
-            Button("Get Auth Code") {
-                snip.requestUserAuthentication()
-            }
-            Button("Get Access Token") {
-                snip.requestAccessToken()
-            }
-            .padding()
+            #if DEBUG
             Button("Refresh Token") {
                 snip.refreshAccessToken()
             }
@@ -25,15 +21,36 @@ struct ContentView: View {
                 snip.makeRequst()
             }
             .padding()
-            Button(snip.isLoggedIn ? "Log out" : "Log in") {
-                if snip.isLoggedIn {
+            #endif
+            if snip.isLoggedIn {
+                Button("Log out") {
+                    showAuthCodeTextField = false
                     snip.logOut()
-                } else {
+                }
+                if snip.displayName != "" {
+                    Text("Logged in as \"\(snip.displayName)\"")
+                }
+            } else {
+                Button("Log in") {
                     snip.requestUserAuthentication()
+                    showAuthCodeTextField = true
                 }
             }
+            if showAuthCodeTextField && !snip.isLoggedIn {
+                Group {
+                    TextField("Auth Code", text: $authCode)
+                    Button("Request Access Token") {
+                        snip.requestAccessToken(code: authCode)
+                        if snip.isLoggedIn {
+                            showAuthCodeTextField.toggle()
+                        }
+                    }
+                }
+            }
+            
         }
-        .frame(width: 300, height: 400, alignment: .center)
+        .frame(width: 300, height: 200, alignment: .center)
+        .padding(20)
     }
 }
 

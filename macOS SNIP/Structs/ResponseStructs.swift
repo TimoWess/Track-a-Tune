@@ -44,3 +44,7 @@ struct CurrentlyPlayingResponse: Codable {
         }
     }
 }
+
+struct UserProfileResponse: Codable {
+    let display_name: String
+}

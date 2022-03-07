@@ -10,4 +10,5 @@ struct UserDefaultsKeys {
     static let accessToken = "SpotifyAccessToken"
     static let refreshToken = "SpotifyRefreshToken"
     static let loggedIn = "IsLoggedIn"
+    static let displayName = "SpotifyDisplayName"
 }
