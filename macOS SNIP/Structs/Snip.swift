@@ -200,7 +200,7 @@ class Snip: ObservableObject {
                         if self.currentSong != "\(artistName) - \(songName)" {
                             self.currentSong = "\(artistName) - \(songName)"
                             print("You are listening to \"\(songName)\" by \"\(artistName)\" on the album \"\(album)\"")
-                            self.writeText(nameString: "\(artistName) - \(songName)    |    ")
+                            self.writeText(nameString: "\(artistName) - \(songName)")
                             self.downloadImage(imageUrl: imageUrl)
                         }
                                                 
@@ -384,5 +384,4 @@ class Snip: ObservableObject {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
-
 }
