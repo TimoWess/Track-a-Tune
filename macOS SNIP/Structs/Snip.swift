@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Network
 
 class Snip: ObservableObject {
     @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String = ""
@@ -53,6 +54,7 @@ class Snip: ObservableObject {
         let url = urlComponents.url!
         
         NSWorkspace.shared.open(url)
+        self.listenForAuthCode()
         
     }
 
@@ -256,7 +258,9 @@ class Snip: ObservableObject {
                 case 200:
                     do {
                         let jsonResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
-                        self.displayName = jsonResponse.display_name
+                        DispatchQueue.main.async {
+                            self.displayName = jsonResponse.display_name
+                        }
                     } catch {
                         print("ERROR: \(error)")
                     }
@@ -282,6 +286,64 @@ class Snip: ObservableObject {
         task.resume()
     }
     
+    func listenForAuthCode() {
+        
+        // Define listener on port 10597
+        let listener = try? NWListener(using: .tcp, on: NWEndpoint.Port(integerLiteral: 10597))
+        
+        listener?.stateUpdateHandler = { newState in
+            switch newState {
+            case .ready:
+                print("Listener ready")
+            default:
+                break
+            }
+        }
+        
+        // Setup connection handler
+        listener?.newConnectionHandler = {(newConnection) in
+            
+            // React to connection on state update
+            newConnection.stateUpdateHandler = {newState in
+                switch newState {
+                case .ready:
+                    print("Connection Ready")
+                    newConnection.receive(minimumIncompleteLength: 0, maximumLength: 100000) { (data, context, isComplete, error) in
+                        // Decode and continue processing data
+                        if let error = error {
+                            print(error)
+                            return
+                        }
+                        guard let data = data else { return}
+                        
+                        // Get auto code in a really dubious way...
+                        guard let code = String(data: data, encoding: .utf8)?.split(separator: " ")[1].split(separator: "=")[1] else {
+                            newConnection.cancel()
+                            return
+                        }
+                        
+                        
+                        self.requestAccessToken(code: String(code))
+                        
+                        // Cancle connection so browser stops loading
+                        newConnection.cancel()
+                    }
+                default:
+                    break
+                }
+            }
+            
+            newConnection.start(queue: DispatchQueue(label: "newconn"))
+        }
+        
+        listener?.start(queue: .main)
+        
+        // Timeout listener after 90 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 90) {
+            listener?.cancel()
+        }
+    }
+    
     func logOut() {
         self.isLoggedIn = false
         self.refreshToken = ""
@@ -291,7 +353,7 @@ class Snip: ObservableObject {
     }
     
     func logIn() {
-        
+        self.requestUserAuthentication()
     }
     
     func registerTimer() {

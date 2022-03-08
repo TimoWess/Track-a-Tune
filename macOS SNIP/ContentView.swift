@@ -11,6 +11,7 @@ struct ContentView: View {
     @StateObject var snip = Snip()
     @State var showAuthCodeTextField = false
     @State var authCode = ""
+    @State var showLogOutConfirmation = false
     var body: some View {
         VStack {
             #if DEBUG
@@ -25,7 +26,16 @@ struct ContentView: View {
             if snip.isLoggedIn {
                 Button("Log out") {
                     showAuthCodeTextField = false
-                    snip.logOut()
+                    showLogOutConfirmation = true
+                }
+                .alert("Are you sure?", isPresented: $showLogOutConfirmation) {
+                    Button("Cancle") {
+                        print("Cancled loggout")
+                    }
+                    Button("Yes") {
+                        print("Logged out")
+                        snip.logOut()
+                    }
                 }
                 if snip.displayName != "" {
                     Text("Logged in as \"\(snip.displayName)\"")
