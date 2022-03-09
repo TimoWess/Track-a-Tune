@@ -14,6 +14,7 @@ class Snip: ObservableObject {
     @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String = ""
     @AppStorage(UserDefaultsKeys.displayName) var displayName: String = ""
     @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool = false
+    @AppStorage(UserDefaultsKeys.textFormat) var textFormat: String = ""
     var timer: Timer? = nil
     var currentSong: String = ""
     
@@ -22,7 +23,7 @@ class Snip: ObservableObject {
             print("User not logged in!")
             self.requestUserAuthentication()
         } else {
-            print("User alread logged in!")
+            print("User already logged in!")
             self.isLoggedIn = true
             self.refreshAccessToken()
             self.registerTimer()
@@ -196,11 +197,11 @@ class Snip: ObservableObject {
                         let artistName = jsonResponse.item.artists[0].name
                         let album = jsonResponse.item.album.name
                         let imageUrl = jsonResponse.item.album.images[0].url
-                        
-                        if self.currentSong != "\(artistName) - \(songName)" {
-                            self.currentSong = "\(artistName) - \(songName)"
+                        let formattedText = self.formattedSongOutput(song: jsonResponse, format: self.textFormat)
+                        if self.currentSong != formattedText {
+                            self.currentSong = formattedText
                             print("You are listening to \"\(songName)\" by \"\(artistName)\" on the album \"\(album)\"")
-                            self.writeText(nameString: "\(artistName) - \(songName)")
+                            self.writeText(formattedText: formattedText)
                             self.downloadImage(imageUrl: imageUrl)
                         }
                                                 
@@ -213,7 +214,7 @@ class Snip: ObservableObject {
                     if self.currentSong != "" {
                         print("No Content: No song playing!")
                         self.currentSong = ""
-                        self.writeText(nameString: "")
+                        self.writeText(formattedText: "")
                     }
                 
                 // Unsuccessful request | Invalid Access Token
@@ -362,14 +363,27 @@ class Snip: ObservableObject {
         }
     }
     
-    func writeText(nameString: String, format: String = "") {
+    func writeText(formattedText: String) {
         let filename = self.getDocumentsDirectory().appendingPathComponent("Snip.txt")
-        
         do {
-            try nameString.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+            try formattedText.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
         } catch {
             // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
         }
+    }
+    
+    func formattedSongOutput(song: CurrentlyPlayingResponse, format: String) -> String {
+        guard format != "" else {
+            return "\(song.item.artists[0].name) - \(song.item.name)"
+        }
+        var output = format
+        
+        output = output.replacingOccurrences(of: "$$t", with: song.item.name)
+        output = output.replacingOccurrences(of: "$$a", with: song.item.artists[0].name)
+        output = output.replacingOccurrences(of: "$$l", with: song.item.album.name)
+        output = output.replacingOccurrences(of: "$$n", with: "\n")
+        
+        return output
     }
     
     func downloadImage(imageUrl: String) {

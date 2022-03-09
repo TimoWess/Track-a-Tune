@@ -24,6 +24,7 @@ struct ContentView: View {
             .padding()
             #endif
             if snip.isLoggedIn {
+                TextField("Output Format", text: $snip.textFormat)
                 Button("Log out") {
                     showAuthCodeTextField = false
                     showLogOutConfirmation = true
