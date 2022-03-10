@@ -1,51 +1,61 @@
 {
   "images" : [
     {
+      "filename" : "Track-a-Tune_temporary-icon-16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-32.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-32.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-512.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
+      "filename" : "Track-a-Tune_temporary-icon-1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
