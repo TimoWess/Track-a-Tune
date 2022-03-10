@@ -1,6 +1,6 @@
 //
 //  ResponseStructs.swift
-//  macOS SNIP
+//  Track-a-Tune
 //
 //  Created by Timo Wesselmann on 05.03.22.
 //

@@ -1,6 +1,6 @@
 //
-//  Snip.swift
-//  macOS SNIP
+//  TuneTracker.swift
+//  Track-a-Tune
 //
 //  Created by Timo Wesselmann on 06.03.22.
 //
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Network
 
-class Snip: ObservableObject {
+class TuneTracker: ObservableObject {
     @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String = ""
     @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String = ""
     @AppStorage(UserDefaultsKeys.displayName) var displayName: String = ""
@@ -364,7 +364,7 @@ class Snip: ObservableObject {
     }
     
     func writeText(formattedText: String) {
-        let filename = self.getDocumentsDirectory().appendingPathComponent("Snip.txt")
+        let filename = self.getDocumentsDirectory().appendingPathComponent("Track-a-Tune.txt")
         do {
             try formattedText.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
         } catch {
@@ -387,7 +387,7 @@ class Snip: ObservableObject {
     }
     
     func downloadImage(imageUrl: String) {
-        let filename = self.getDocumentsDirectory().appendingPathComponent("Snip_Artwork.jpeg")
+        let filename = self.getDocumentsDirectory().appendingPathComponent("Track-a-Tune_Artwork.jpeg")
         let url = URL(string: imageUrl)!
         
         // TODO: Implement...

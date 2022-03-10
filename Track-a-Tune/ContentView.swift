@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  macOS SNIP
+//  Track-a-Tune
 //
 //  Created by Timo Wesselmann on 05.03.22.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var snip = Snip()
+    @StateObject var tuneTracker = TuneTracker()
     @State var showAuthCodeTextField = false
     @State var authCode = ""
     @State var showLogOutConfirmation = false
@@ -16,15 +16,15 @@ struct ContentView: View {
         VStack {
             #if DEBUG
             Button("Refresh Token") {
-                snip.refreshAccessToken()
+                tuneTracker.refreshAccessToken()
             }
             Button("Make Request") {
-                snip.makeRequst()
+                tuneTracker.makeRequst()
             }
             .padding()
             #endif
-            if snip.isLoggedIn {
-                TextField("Output Format", text: $snip.textFormat)
+            if tuneTracker.isLoggedIn {
+                TextField("Output Format", text: $tuneTracker.textFormat)
                 Button("Log out") {
                     showAuthCodeTextField = false
                     showLogOutConfirmation = true
@@ -35,24 +35,24 @@ struct ContentView: View {
                     }
                     Button("Yes") {
                         print("Logged out")
-                        snip.logOut()
+                        tuneTracker.logOut()
                     }
                 }
-                if snip.displayName != "" {
-                    Text("Logged in as \"\(snip.displayName)\"")
+                if tuneTracker.displayName != "" {
+                    Text("Logged in as \"\(tuneTracker.displayName)\"")
                 }
             } else {
                 Button("Log in") {
-                    snip.requestUserAuthentication()
+                    tuneTracker.requestUserAuthentication()
                     showAuthCodeTextField = true
                 }
             }
-            if showAuthCodeTextField && !snip.isLoggedIn {
+            if showAuthCodeTextField && !tuneTracker.isLoggedIn {
                 Group {
                     TextField("Auth Code", text: $authCode)
                     Button("Request Access Token") {
-                        snip.requestAccessToken(code: authCode)
-                        if snip.isLoggedIn {
+                        tuneTracker.requestAccessToken(code: authCode)
+                        if tuneTracker.isLoggedIn {
                             showAuthCodeTextField.toggle()
                         }
                     }

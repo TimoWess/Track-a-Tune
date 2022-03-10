@@ -1,6 +1,6 @@
 ABOUT
 =====
-This is a macOS port of [dlrudie/Snip](https://github.com/dlrudie/Snip) written in Swift.
+Track-a-Tune tries to bring the functionality of [dlrudie/Snip](https://github.com/dlrudie/Snip) to mac OS using Swift.
 This program will generate a text file in your documents folder containing the currently playing song on spotify in a format of your choosing.
 
 It currently only supports the [Spotify](https://www.spotify.com/) API.
@@ -10,10 +10,10 @@ HOW TO USE
 ### Authentication
 1. Download the zip file containing the app and extract it
 2. Open the app
-3. A browser window will open requesting you to login with your Spotify credentials
+3. A browser window will open, requesting you to log in with your Spotify credentials
 4. If the app displays a text saying you are logged in you are done with the authentication step
 5. If the app still only shows that "Log in" button there was an error accessing the auth code from the redirect. In that case press the "Log in" button
-6. A browser window will open, requesting you to login with your Spotify credentials
+6. A browser window will open, requesting you to log in with your Spotify credentials
 7. Should the app again not log you in automatically there will be a text field titled "Auth code"
 8. Paste the auth code from the redirect url into the text field and press the "Request Access Token" button
 9. You should now be logged in
@@ -36,7 +36,7 @@ IN DEVELOPMENT
 WIP:
 * Downloading the album artwork
 
-In the future I want to support most if not all of the features that the original Snip program supports.
+In the future I want to support most if not all of the features that the Snip program supports.
 This includes:
 * Choosing the output directory
 * Support for the iTunes API

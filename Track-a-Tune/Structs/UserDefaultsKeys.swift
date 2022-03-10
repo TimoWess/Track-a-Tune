@@ -1,6 +1,6 @@
 //
 //  UserDefaultsKeys.swift
-//  macOS SNIP
+//  Track-a-Tune
 //
 //  Created by Timo Wesselmann on 06.03.22.
 //

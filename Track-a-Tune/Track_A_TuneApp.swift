@@ -1,6 +1,6 @@
 //
-//  macOS_SNIPApp.swift
-//  macOS SNIP
+//  Track-a-Tune.swift
+//  Track-a-Tune
 //
 //  Created by Timo Wesselmann on 05.03.22.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct macOS_SNIPApp: App {
+struct Track_A_TuneApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
