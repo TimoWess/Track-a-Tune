@@ -373,11 +373,15 @@ class TuneTracker: ObservableObject {
     }
     
     func formattedSongOutput(song: CurrentlyPlayingResponse, format: String) -> String {
+        
+        // Return default formatting
         guard format != "" else {
             return "\(song.item.artists[0].name) - \(song.item.name)"
         }
+        
         var output = format
         
+        // Replace placeholders with track information
         output = output.replacingOccurrences(of: "$$t", with: song.item.name)
         output = output.replacingOccurrences(of: "$$a", with: song.item.artists[0].name)
         output = output.replacingOccurrences(of: "$$l", with: song.item.album.name)
