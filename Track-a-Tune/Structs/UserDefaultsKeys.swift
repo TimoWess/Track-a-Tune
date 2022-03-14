@@ -12,4 +12,5 @@ struct UserDefaultsKeys {
     static let loggedIn = "IsLoggedIn"
     static let displayName = "SpotifyDisplayName"
     static let textFormat = "OutputTextFormat"
+    static let downloadArtwork = "DownloadArtwork"
 }

@@ -15,6 +15,7 @@ class TuneTracker: ObservableObject {
     @AppStorage(UserDefaultsKeys.displayName) var displayName: String = ""
     @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool = false
     @AppStorage(UserDefaultsKeys.textFormat) var textFormat: String = ""
+    @AppStorage(UserDefaultsKeys.downloadArtwork) var downloadArtwork: Bool = false
     var timer: Timer? = nil
     var currentSong: String = ""
     
@@ -202,7 +203,9 @@ class TuneTracker: ObservableObject {
                             self.currentSong = formattedText
                             print("You are listening to \"\(songName)\" by \"\(artistName)\" on the album \"\(album)\"")
                             self.writeText(formattedText: formattedText)
-                            self.downloadImage(imageUrl: imageUrl)
+                            if self.downloadArtwork {
+                                self.downloadImage(imageUrl: imageUrl)
+                            }
                         }
                                                 
                     } catch {
@@ -351,6 +354,7 @@ class TuneTracker: ObservableObject {
         self.accessToken = ""
         self.displayName = ""
         self.timer?.invalidate()
+        self.downloadArtwork = false
     }
     
     func logIn() {

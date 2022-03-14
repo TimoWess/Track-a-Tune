@@ -14,7 +14,7 @@ struct ContentView: View {
     @State var showLogOutConfirmation = false
     var body: some View {
         VStack {
-            #if DEBUG
+#if DEBUG
             Button("Refresh Token") {
                 tuneTracker.refreshAccessToken()
             }
@@ -22,8 +22,9 @@ struct ContentView: View {
                 tuneTracker.makeRequst()
             }
             .padding()
-            #endif
+#endif
             if tuneTracker.isLoggedIn {
+                Toggle("Download Artwort", isOn: $tuneTracker.downloadArtwork)
                 TextField("Output Format", text: $tuneTracker.textFormat)
                 Button("Log out") {
                     showAuthCodeTextField = false
