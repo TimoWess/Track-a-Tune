@@ -394,7 +394,18 @@ class TuneTracker: ObservableObject {
         let filename = self.getDocumentsDirectory().appendingPathComponent("Track-a-Tune_Artwork.jpeg")
         let url = URL(string: imageUrl)!
         
-        // TODO: Implement...
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard error == nil else { return }
+            guard let data = data else { return }
+            do {
+                try data.write(to: filename, options: .atomic)
+            } catch {
+                print(error)
+            }
+            
+        }
+        
+        task.resume()
         
     }
 

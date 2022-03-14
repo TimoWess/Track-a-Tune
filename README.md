@@ -34,11 +34,10 @@ Input your desired output format into the text field
 IN DEVELOPMENT
 =====
 WIP:
-* Downloading the album artwork
+* Choosing the output directory
 
 In the future I want to support most if not all of the features that the Snip program supports.
 This includes:
-* Choosing the output directory
 * Support for the iTunes API
 
 DISCLAIMER
