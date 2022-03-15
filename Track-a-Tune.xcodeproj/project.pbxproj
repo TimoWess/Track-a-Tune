@@ -21,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		58116BBC27D52B2900271C0C /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
+		5869B27C27E03F50005DD91C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58739EB827D97880004A5DA3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		58B72C0627D38567000D4595 /* UserSecrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSecrets.swift; sourceTree = "<group>"; };
 		58B72C0D27D39BC7000D4595 /* ResponseStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseStructs.swift; sourceTree = "<group>"; };
@@ -91,6 +92,7 @@
 		58FE77A327D384A2002EACFA /* Track-a-Tune */ = {
 			isa = PBXGroup;
 			children = (
+				5869B27C27E03F50005DD91C /* Info.plist */,
 				58B72C0A27D39B6D000D4595 /* Structs */,
 				58B72C0927D38586000D4595 /* UserSecrets */,
 				58B72C0827D38576000D4595 /* Views */,
@@ -324,6 +326,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Track-a-Tune/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -352,6 +355,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Track-a-Tune/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (

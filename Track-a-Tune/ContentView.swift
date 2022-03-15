@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var tuneTracker = TuneTracker()
+    @StateObject var tuneTracker = TuneTracker.shared
     @State var showAuthCodeTextField = false
     @State var authCode = ""
     @State var showLogOutConfirmation = false

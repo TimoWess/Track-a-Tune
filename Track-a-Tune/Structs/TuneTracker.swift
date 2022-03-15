@@ -19,7 +19,9 @@ class TuneTracker: ObservableObject {
     var timer: Timer? = nil
     var currentSong: String = ""
     
-    init() {
+    static let shared = TuneTracker()
+    
+    private init() {
         if !self.isLoggedIn {
             print("User not logged in!")
             self.requestUserAuthentication()
@@ -36,7 +38,7 @@ class TuneTracker: ObservableObject {
         // Define Api endpoint and query parameters
         let endpoint = "https://accounts.spotify.com/authorize?"
         let clientId = UserSecrets.CLIENT_ID
-        let redirectUri = "http://localhost:10597/"
+        let redirectUri = "trackatune://"
         let responseType = "code"
         let scope = "user-read-currently-playing"
         let showDialog = "true"
@@ -56,16 +58,15 @@ class TuneTracker: ObservableObject {
         let url = urlComponents.url!
         
         NSWorkspace.shared.open(url)
-        self.listenForAuthCode()
         
     }
-
+    
     func requestAccessToken(code: String) {
         
         let endpoint = "https://accounts.spotify.com/api/token"
         let grantType = "authorization_code"
         let code = code
-        let redirectUri = "http://localhost:10597/"
+        let redirectUri = "trackatune://"
         
         var requestBodyCompomnents = URLComponents()
         requestBodyCompomnents.queryItems =
@@ -122,7 +123,7 @@ class TuneTracker: ObservableObject {
         task.resume()
         
     }
-
+    
     func refreshAccessToken() {
         let endpoint = "https://accounts.spotify.com/api/token"
         let grantType = "refresh_token"
@@ -169,7 +170,7 @@ class TuneTracker: ObservableObject {
         
         task.resume()
     }
-
+    
     func makeRequst() {
         
         // Define endpoint
@@ -190,52 +191,52 @@ class TuneTracker: ObservableObject {
             switch response.statusCode {
                 
                 // Successful request | Write data
-                case 200:
-                    do {
-                        let jsonResponse = try JSONDecoder().decode(CurrentlyPlayingResponse.self, from: data)
-                        
-                        let songName = jsonResponse.item.name
-                        let artistName = jsonResponse.item.artists[0].name
-                        let album = jsonResponse.item.album.name
-                        let imageUrl = jsonResponse.item.album.images[0].url
-                        let formattedText = self.formattedSongOutput(song: jsonResponse, format: self.textFormat)
-                        if self.currentSong != formattedText {
-                            self.currentSong = formattedText
-                            print("You are listening to \"\(songName)\" by \"\(artistName)\" on the album \"\(album)\"")
-                            self.writeText(formattedText: formattedText)
-                            if self.downloadArtwork {
-                                self.downloadImage(imageUrl: imageUrl)
-                            }
+            case 200:
+                do {
+                    let jsonResponse = try JSONDecoder().decode(CurrentlyPlayingResponse.self, from: data)
+                    
+                    let songName = jsonResponse.item.name
+                    let artistName = jsonResponse.item.artists[0].name
+                    let album = jsonResponse.item.album.name
+                    let imageUrl = jsonResponse.item.album.images[0].url
+                    let formattedText = self.formattedSongOutput(song: jsonResponse, format: self.textFormat)
+                    if self.currentSong != formattedText {
+                        self.currentSong = formattedText
+                        print("You are listening to \"\(songName)\" by \"\(artistName)\" on the album \"\(album)\"")
+                        self.writeText(formattedText: formattedText)
+                        if self.downloadArtwork {
+                            self.downloadImage(imageUrl: imageUrl)
                         }
-                                                
-                    } catch {
-                        print("ERROR: \(error)")
                     }
+                    
+                } catch {
+                    print("ERROR: \(error)")
+                }
                 
                 // Successful request | Currently no song playing
-                case 204:
-                    if self.currentSong != "" {
-                        print("No Content: No song playing!")
-                        self.currentSong = ""
-                        self.writeText(formattedText: "")
-                    }
+            case 204:
+                if self.currentSong != "" {
+                    print("No Content: No song playing!")
+                    self.currentSong = ""
+                    self.writeText(formattedText: "")
+                }
                 
                 // Unsuccessful request | Invalid Access Token
-                case 401:
-                    print("STATUS CODE: \(response.statusCode)")
-                    print("Regenerating Access Token")
-                    self.refreshAccessToken()
+            case 401:
+                print("STATUS CODE: \(response.statusCode)")
+                print("Regenerating Access Token")
+                self.refreshAccessToken()
                 
-                    // Start another request after 1 second
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        self.makeRequst()
-                    }
+                // Start another request after 1 second
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.makeRequst()
+                }
                 
                 // Unsuccessful request | Unusual response
-                default:
-                    print("Unusual status code: \(response.statusCode)")
-                    print(String(data: data, encoding: .utf8) as Any)
-                }
+            default:
+                print("Unusual status code: \(response.statusCode)")
+                print(String(data: data, encoding: .utf8) as Any)
+            }
         }
         
         task.resume()
@@ -259,93 +260,35 @@ class TuneTracker: ObservableObject {
             switch response.statusCode {
                 
                 // Successful request | Write data
-                case 200:
-                    do {
-                        let jsonResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
-                        DispatchQueue.main.async {
-                            self.displayName = jsonResponse.display_name
-                        }
-                    } catch {
-                        print("ERROR: \(error)")
+            case 200:
+                do {
+                    let jsonResponse = try JSONDecoder().decode(UserProfileResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        self.displayName = jsonResponse.display_name
                     }
+                } catch {
+                    print("ERROR: \(error)")
+                }
                 
                 // Unsuccessful request | Invalid Access Token
-                case 401:
-                    print("STATUS CODE: \(response.statusCode)")
-                    print("Regenerating Access Token")
-                    self.refreshAccessToken()
+            case 401:
+                print("STATUS CODE: \(response.statusCode)")
+                print("Regenerating Access Token")
+                self.refreshAccessToken()
                 
-                    // Start another request after 1 second
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        self.requestUsername()
-                    }
+                // Start another request after 1 second
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.requestUsername()
+                }
                 
                 // Unsuccessful request | Unusual response
-                default:
-                    print("Unusual status code: \(response.statusCode)")
-                    print(String(data: data, encoding: .utf8) as Any)
-                }
+            default:
+                print("Unusual status code: \(response.statusCode)")
+                print(String(data: data, encoding: .utf8) as Any)
+            }
         }
         
         task.resume()
-    }
-    
-    func listenForAuthCode() {
-        
-        // Define listener on port 10597
-        let listener = try? NWListener(using: .tcp, on: NWEndpoint.Port(integerLiteral: 10597))
-        
-        listener?.stateUpdateHandler = { newState in
-            switch newState {
-            case .ready:
-                print("Listener ready")
-            default:
-                break
-            }
-        }
-        
-        // Setup connection handler
-        listener?.newConnectionHandler = {(newConnection) in
-            
-            // React to connection on state update
-            newConnection.stateUpdateHandler = {newState in
-                switch newState {
-                case .ready:
-                    print("Connection Ready")
-                    newConnection.receive(minimumIncompleteLength: 0, maximumLength: 100000) { (data, context, isComplete, error) in
-                        // Decode and continue processing data
-                        if let error = error {
-                            print(error)
-                            return
-                        }
-                        guard let data = data else { return}
-                        
-                        // Get auto code in a really dubious way...
-                        guard let code = String(data: data, encoding: .utf8)?.split(separator: " ")[1].split(separator: "=")[1] else {
-                            newConnection.cancel()
-                            return
-                        }
-                        
-                        
-                        self.requestAccessToken(code: String(code))
-                        
-                        // Cancle connection so browser stops loading
-                        newConnection.cancel()
-                    }
-                default:
-                    break
-                }
-            }
-            
-            newConnection.start(queue: DispatchQueue(label: "newconn"))
-        }
-        
-        listener?.start(queue: .main)
-        
-        // Timeout listener after 90 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 90) {
-            listener?.cancel()
-        }
     }
     
     func logOut() {
@@ -355,6 +298,7 @@ class TuneTracker: ObservableObject {
         self.displayName = ""
         self.timer?.invalidate()
         self.downloadArtwork = false
+        self.textFormat = ""
     }
     
     func logIn() {
@@ -412,7 +356,7 @@ class TuneTracker: ObservableObject {
         task.resume()
         
     }
-
+    
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
