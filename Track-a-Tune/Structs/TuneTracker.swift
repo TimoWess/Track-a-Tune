@@ -10,38 +10,39 @@ import SwiftUI
 import Network
 
 class TuneTracker: ObservableObject {
-    @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String = ""
-    @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String = ""
-    @AppStorage(UserDefaultsKeys.displayName) var displayName: String = ""
-    @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool = false
-    @AppStorage(UserDefaultsKeys.textFormat) var textFormat: String = ""
+    @AppStorage(UserDefaultsKeys.refreshToken) var refreshToken: String     = ""
+    @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String       = ""
+    @AppStorage(UserDefaultsKeys.displayName) var displayName: String       = ""
+    @AppStorage(UserDefaultsKeys.textFormat) var textFormat: String         = ""
+    @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool             = false
     @AppStorage(UserDefaultsKeys.downloadArtwork) var downloadArtwork: Bool = false
+    
     var timer: Timer? = nil
     var currentSong: String = ""
     
+    // Instantiate singleton
     static let shared = TuneTracker()
     
     private init() {
-        if !self.isLoggedIn {
-            print("User not logged in!")
-            self.requestUserAuthentication()
-        } else {
+        if self.isLoggedIn {
             print("User already logged in!")
-            self.isLoggedIn = true
             self.refreshAccessToken()
             self.registerTimer()
+        } else {
+            print("User not logged in!")
+            self.requestUserAuthentication()
         }
     }
     
     func requestUserAuthentication() {
         
         // Define Api endpoint and query parameters
-        let endpoint = "https://accounts.spotify.com/authorize?"
-        let clientId = UserSecrets.CLIENT_ID
-        let redirectUri = "trackatune://"
-        let responseType = "code"
-        let scope = "user-read-currently-playing"
-        let showDialog = "true"
+        let endpoint        = "https://accounts.spotify.com/authorize?"
+        let clientId        = UserSecrets.CLIENT_ID
+        let redirectUri     = "trackatune://"
+        let responseType    = "code"
+        let scope           = "user-read-currently-playing"
+        let showDialog      = "true"
         
         // Build URL
         var urlComponents = URLComponents(string: endpoint)!
@@ -63,9 +64,9 @@ class TuneTracker: ObservableObject {
     
     func requestAccessToken(code: String) {
         
-        let endpoint = "https://accounts.spotify.com/api/token"
-        let grantType = "authorization_code"
-        let code = code
+        let endpoint    = "https://accounts.spotify.com/api/token"
+        let grantType   = "authorization_code"
+        let code        = code
         let redirectUri = "trackatune://"
         
         var requestBodyCompomnents = URLComponents()
@@ -292,13 +293,13 @@ class TuneTracker: ObservableObject {
     }
     
     func logOut() {
-        self.isLoggedIn = false
-        self.refreshToken = ""
-        self.accessToken = ""
-        self.displayName = ""
+        self.refreshToken       = ""
+        self.accessToken        = ""
+        self.displayName        = ""
+        self.textFormat         = ""
+        self.downloadArtwork    = false
+        self.isLoggedIn         = false
         self.timer?.invalidate()
-        self.downloadArtwork = false
-        self.textFormat = ""
     }
     
     func logIn() {

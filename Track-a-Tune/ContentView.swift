@@ -9,9 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var tuneTracker = TuneTracker.shared
-    @State var showAuthCodeTextField = false
-    @State var authCode = ""
-    @State var showLogOutConfirmation = false
+    
+    @State var showAuthCodeTextField    = false
+    @State var showLogOutConfirmation   = false
+    @State var authCode                 = ""
+    
     var body: some View {
         VStack {
 #if DEBUG
