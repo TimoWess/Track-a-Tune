@@ -14,6 +14,7 @@ class TuneTracker: ObservableObject {
     @AppStorage(UserDefaultsKeys.accessToken) var accessToken: String       = ""
     @AppStorage(UserDefaultsKeys.displayName) var displayName: String       = ""
     @AppStorage(UserDefaultsKeys.textFormat) var textFormat: String         = ""
+    @AppStorage(UserDefaultsKeys.saveLocation) var saveLocation: String     = ""
     @AppStorage(UserDefaultsKeys.loggedIn) var isLoggedIn: Bool             = false
     @AppStorage(UserDefaultsKeys.downloadArtwork) var downloadArtwork: Bool = false
     
@@ -292,11 +293,13 @@ class TuneTracker: ObservableObject {
         task.resume()
     }
     
+    // Clear all UserDefaults data and invalidate update timer
     func logOut() {
         self.refreshToken       = ""
         self.accessToken        = ""
         self.displayName        = ""
         self.textFormat         = ""
+        self.saveLocation       = ""
         self.downloadArtwork    = false
         self.isLoggedIn         = false
         self.timer?.invalidate()
@@ -306,6 +309,7 @@ class TuneTracker: ObservableObject {
         self.requestUserAuthentication()
     }
     
+    // Add timer for updating track information
     func registerTimer() {
         self.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in
             self.makeRequst()
@@ -313,7 +317,8 @@ class TuneTracker: ObservableObject {
     }
     
     func writeText(formattedText: String) {
-        let filename = self.getDocumentsDirectory().appendingPathComponent("Track-a-Tune.txt")
+        let path = !self.saveLocation.isEmpty ? URL(string: self.saveLocation) : self.getDocumentsDirectory()
+        let filename = path!.appendingPathComponent("Track-a-Tune.txt")
         do {
             try formattedText.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
         } catch {
@@ -340,12 +345,16 @@ class TuneTracker: ObservableObject {
     }
     
     func downloadImage(imageUrl: String) {
-        let filename = self.getDocumentsDirectory().appendingPathComponent("Track-a-Tune_Artwork.jpeg")
+        // Change Path if preference set
+        let path = !self.saveLocation.isEmpty ? URL(string: self.saveLocation) : self.getDocumentsDirectory()
+        let filename = path!.appendingPathComponent("Track-a-Tune_Artwork.jpeg")
         let url = URL(string: imageUrl)!
         
+        // Get image data
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard error == nil else { return }
             guard let data = data else { return }
+            // Write image to disk
             do {
                 try data.write(to: filename, options: .atomic)
             } catch {
@@ -361,5 +370,30 @@ class TuneTracker: ObservableObject {
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }
+    
+    // Open default file selector dialog
+    func selectFolder() {
+        let folderChooserPoint = CGPoint(x: 0, y: 0)
+        let folderChooserSize = CGSize(width: 500, height: 600)
+        let folderChooserRectangle = CGRect(origin: folderChooserPoint, size: folderChooserSize)
+        let folderPicker = NSOpenPanel(contentRect: folderChooserRectangle, styleMask: .utilityWindow, backing: .buffered, defer: true)
+        
+        folderPicker.canChooseDirectories           = true
+        folderPicker.canChooseFiles                 = false
+        folderPicker.allowsMultipleSelection        = false
+        folderPicker.canDownloadUbiquitousContents  = true
+        folderPicker.canResolveUbiquitousConflicts  = true
+        
+        // Start dialog
+        folderPicker.begin { response in
+            if response == .OK {
+                let pickedFolders = folderPicker.url?.description
+                
+                self.saveLocation = pickedFolders ?? self.getDocumentsDirectory().description
+            } else {
+                print(response)
+            }
+        }
     }
 }

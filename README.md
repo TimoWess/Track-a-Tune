@@ -34,10 +34,6 @@ Input your desired output format into the text field
 IN DEVELOPMENT
 =====
 WIP:
-* Choosing the output directory
-
-In the future I want to support most if not all of the features that the Snip program supports.
-This includes:
 * Support for the iTunes API
 
 DISCLAIMER

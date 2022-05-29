@@ -28,6 +28,9 @@ struct ContentView: View {
             if tuneTracker.isLoggedIn {
                 Toggle("Download Artwort", isOn: $tuneTracker.downloadArtwork)
                 TextField("Output Format", text: $tuneTracker.textFormat)
+                Button("Set Save Location") {
+                    tuneTracker.selectFolder()
+                }
                 Button("Log out") {
                     showAuthCodeTextField = false
                     showLogOutConfirmation = true

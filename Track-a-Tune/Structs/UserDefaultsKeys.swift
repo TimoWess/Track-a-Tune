@@ -7,10 +7,11 @@
 
 import Foundation
 struct UserDefaultsKeys {
-    static let accessToken = "SpotifyAccessToken"
-    static let refreshToken = "SpotifyRefreshToken"
-    static let loggedIn = "IsLoggedIn"
-    static let displayName = "SpotifyDisplayName"
-    static let textFormat = "OutputTextFormat"
-    static let downloadArtwork = "DownloadArtwork"
+    static let accessToken      = "SpotifyAccessToken"
+    static let refreshToken     = "SpotifyRefreshToken"
+    static let loggedIn         = "IsLoggedIn"
+    static let displayName      = "SpotifyDisplayName"
+    static let textFormat       = "OutputTextFormat"
+    static let downloadArtwork  = "DownloadArtwork"
+    static let saveLocation     = "SaveLocation"
 }
