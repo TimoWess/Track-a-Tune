@@ -25,6 +25,7 @@ There are 4 different replacement strings available:
 * $$a -> Artist name
 * $$l -> Album name
 * $$n -> New line character
+
 Input your desired output format into the text field
 
 #### Example:

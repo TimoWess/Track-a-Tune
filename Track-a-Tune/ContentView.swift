@@ -26,11 +26,15 @@ struct ContentView: View {
             .padding()
 #endif
             if tuneTracker.isLoggedIn {
-                Toggle("Download Artwort", isOn: $tuneTracker.downloadArtwork)
-                TextField("Output Format", text: $tuneTracker.textFormat)
+                Spacer()
+                HStack {
+                    TextField("Output Format", text: $tuneTracker.textFormat)
+                    Toggle("Download Artwort", isOn: $tuneTracker.downloadArtwork)
+                }
                 Button("Set Save Location") {
                     tuneTracker.selectFolder()
                 }
+                Spacer()
                 Button("Log out") {
                     showAuthCodeTextField = false
                     showLogOutConfirmation = true
