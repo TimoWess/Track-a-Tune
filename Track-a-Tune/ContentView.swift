@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var tuneTracker = TuneTracker.shared
-    
     @State var showAuthCodeTextField    = false
     @State var showLogOutConfirmation   = false
     @State var authCode                 = ""
@@ -52,23 +51,8 @@ struct ContentView: View {
                     Text("Logged in as \"\(tuneTracker.displayName)\"")
                 }
             } else {
-                Button("Log in") {
-                    tuneTracker.requestUserAuthentication()
-                    showAuthCodeTextField = true
-                }
+                LoginView(tuneTracker: tuneTracker, showAuthCodeTextField: $showAuthCodeTextField, authCode: $authCode)
             }
-            if showAuthCodeTextField && !tuneTracker.isLoggedIn {
-                Group {
-                    TextField("Auth Code", text: $authCode)
-                    Button("Request Access Token") {
-                        tuneTracker.requestAccessToken(code: authCode)
-                        if tuneTracker.isLoggedIn {
-                            showAuthCodeTextField.toggle()
-                        }
-                    }
-                }
-            }
-            
         }
         .frame(width: 300, height: 200, alignment: .center)
         .padding(20)

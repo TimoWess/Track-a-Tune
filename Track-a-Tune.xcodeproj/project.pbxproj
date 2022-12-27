@@ -12,6 +12,7 @@
 		58B72C0727D38567000D4595 /* UserSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B72C0627D38567000D4595 /* UserSecrets.swift */; };
 		58B72C0E27D39BC7000D4595 /* ResponseStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B72C0D27D39BC7000D4595 /* ResponseStructs.swift */; };
 		58B72C1027D3B110000D4595 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 58B72C0F27D3B110000D4595 /* .gitignore */; };
+		58C4A48F294A37D600D97068 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C4A48E294A37D600D97068 /* LoginView.swift */; };
 		58CCF72D27D4771800B9D9FB /* TuneTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CCF72C27D4771800B9D9FB /* TuneTracker.swift */; };
 		58FE77A527D384A2002EACFA /* Track_A_TuneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FE77A427D384A2002EACFA /* Track_A_TuneApp.swift */; };
 		58FE77A727D384A2002EACFA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FE77A627D384A2002EACFA /* ContentView.swift */; };
@@ -26,6 +27,7 @@
 		58B72C0627D38567000D4595 /* UserSecrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSecrets.swift; sourceTree = "<group>"; };
 		58B72C0D27D39BC7000D4595 /* ResponseStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseStructs.swift; sourceTree = "<group>"; };
 		58B72C0F27D3B110000D4595 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		58C4A48E294A37D600D97068 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		58CCF72C27D4771800B9D9FB /* TuneTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TuneTracker.swift; sourceTree = "<group>"; };
 		58FE77A127D384A2002EACFA /* Track-a-Tune.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Track-a-Tune.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58FE77A427D384A2002EACFA /* Track_A_TuneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track_A_TuneApp.swift; sourceTree = "<group>"; };
@@ -49,6 +51,7 @@
 		58B72C0827D38576000D4595 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				58C4A48E294A37D600D97068 /* LoginView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -141,7 +144,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1330;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					58FE77A027D384A2002EACFA = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -186,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				58CCF72D27D4771800B9D9FB /* TuneTracker.swift in Sources */,
+				58C4A48F294A37D600D97068 /* LoginView.swift in Sources */,
 				58B72C0727D38567000D4595 /* UserSecrets.swift in Sources */,
 				58FE77A727D384A2002EACFA /* ContentView.swift in Sources */,
 				58FE77A527D384A2002EACFA /* Track_A_TuneApp.swift in Sources */,
@@ -231,6 +235,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -292,6 +297,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -319,9 +325,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Track-a-Tune/Track-a-Tune.entitlements";
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Track-a-Tune/Preview Content\"";
 				DEVELOPMENT_TEAM = 42LUBBN42U;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -349,9 +357,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Track-a-Tune/Track-a-Tune.entitlements";
 				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Track-a-Tune/Preview Content\"";
 				DEVELOPMENT_TEAM = 42LUBBN42U;
 				ENABLE_HARDENED_RUNTIME = YES;
